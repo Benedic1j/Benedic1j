@@ -1,0 +1,150 @@
+<?php
+
+class ControladorCompletaRegUsu{
+
+
+	/*=============================================
+	ACTUALIZAR PERFIL
+	=============================================*/
+
+	public function ctrcompletarRegistro(){
+
+		if(isset($_POST["compUsuario"])){
+
+			/*=============================================
+			VALIDAR IMAGEN
+			=============================================*/
+
+			$ruta = "";
+
+			if(isset($_FILES["datosImagen"]["tmp_name"]) && !empty($_FILES["datosImagen"]["tmp_name"])){
+
+				/*=============================================
+				PRIMERO PREGUNTAMOS SI EXISTE OTRA IMAGEN EN LA BD
+				=============================================*/
+
+				$directorio = "vistas/img/usuarios/".$_POST["idUsuario"];
+
+				if(!empty($_POST["fotoUsuario"])){
+
+					unlink($_POST["fotoUsuario"]);
+				
+				}else{
+
+					mkdir($directorio, 0755);
+
+				}
+
+				/*=============================================
+				GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+				=============================================*/
+
+				list($ancho, $alto) = getimagesize($_FILES["datosImagen"]["tmp_name"]);
+
+				$nuevoAncho = 500;
+				$nuevoAlto = 500;	
+
+				$aleatorio = mt_rand(100, 999);
+
+				if($_FILES["datosImagen"]["type"] == "image/jpeg"){
+
+					$ruta = "vistas/img/usuarios/".$_POST["idUsuario"]."/".$aleatorio.".jpg";
+
+					/*=============================================
+					MOFICAMOS TAMAÑO DE LA FOTO
+					=============================================*/
+
+					$origen = imagecreatefromjpeg($_FILES["datosImagen"]["tmp_name"]);
+
+					$destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+					imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+					imagejpeg($destino, $ruta);
+
+				}
+
+				if($_FILES["datosImagen"]["type"] == "image/png"){
+
+					$ruta = "vistas/img/usuarios/".$_POST["idUsuario"]."/".$aleatorio.".png";
+
+					/*=============================================
+					MOFICAMOS TAMAÑO DE LA FOTO
+					=============================================*/
+
+					$origen = imagecreatefrompng($_FILES["datosImagen"]["tmp_name"]);
+
+					$destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+					imagealphablending($destino, FALSE);
+    			
+					imagesavealpha($destino, TRUE);
+
+					imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+					imagepng($destino, $ruta);
+
+				}
+
+			}
+
+
+			$datos = array("nombre" => $_POST["compUsuario"],
+						   "email" => $_POST["compEmail"],
+						   "genero" => $_POST["compGenero"],
+						   "fenac" => $_POST["fecha_nacimiento"],
+						   "nacionalidad" => $_POST["compNacio"],
+						   "rut" => $_POST["compRut"],
+						   "edocivil" => $_POST["compEdoCivil"],
+						   "ocupacion" => $_POST["compOcupacion"],
+						   "profesion" => $_POST["compProfesion"],
+						   "celular" => $_POST["compCelular"],
+						   "paisres" => $_POST["compPaisRes"],
+						   "ciudad" => $_POST["compCiudad"],
+						   "direccion" => $_POST["compDireccion"],
+						   "cp" => $_POST["compCodPostal"],
+						   "multimedia" =>  $_POST["valorMultimedia"],
+						   "completo" => 0,
+						   "id" => $_POST["idUsuario"]);
+
+			$tabla = "usuarios";
+
+			$respuesta = ModeloCompletaRegUsu::mdlActualizarPerfil($tabla, $datos);
+
+			if($respuesta == "ok"){
+
+				$_SESSION["validarSesion"] = "ok";
+				$_SESSION["id"] = $datos["id"];
+				$_SESSION["nombre"] = $datos["nombre"];
+				$_SESSION["foto"] = $datos["foto"];
+				$_SESSION["email"] = $datos["email"];
+				$_SESSION["modo"] = $_POST["modoUsuario"];
+				$_SESSION["completo"] = $datos["completo"];
+
+				echo '<script> 
+
+						swal({
+							  title: "¡OK!",
+							  text: "¡Su registro se completado correctamente!",
+							  type:"success",
+							  confirmButtonText: "Cerrar",
+							  closeOnConfirm: false
+							},
+
+							function(isConfirm){
+
+								if(isConfirm){
+									window.location = "perfil";
+								}
+						});
+
+				</script>';
+
+
+			}
+
+		}
+
+	}
+
+}
