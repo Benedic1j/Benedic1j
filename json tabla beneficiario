@@ -1,0 +1,131 @@
+<?php
+session_start();
+require_once "../controladores/destinatarios.controlador.php";
+require_once "../modelos/destinatarios.modelo.php";
+
+class TablaDestinatarios{
+
+  /*=============================================
+  MOSTRAR LA TABLA DE LOS DETINATARIOS
+  =============================================*/ 
+    // public $idUsuario;
+
+ 	public function mostrarTabla(){	
+
+	// $datosJson = '{
+
+	// 	"data": [ ';
+
+	// 	$datosJson	 .= '[
+	// 		"1",
+	// 		"JUAN PEREZ",
+	// 		"Persona",
+	// 		"CLP",
+	// 		"BANCO POPULAR",
+	// 		"0116-0114-65-2114036547",
+	// 		"Corriente",
+	// 		"1126258879",
+	// 		"2542",
+	// 		"252",
+	// 		"252"	
+	// 	]]		  
+	// 	}'; 
+
+	// 	echo $datosJson;
+
+ 	$item = null;
+	$valor = $_SESSION["id"];
+ 	// $valor = $this->idUsuario;
+
+ 	$destinatarios = ControladorDestinatarios::ctrMostrarDestinatarios($item, $valor);	
+	
+	//  echo json_encode($destinatarios);
+	//  return;
+
+ 	// if(count($destinatarios) == 0){
+
+    //   $datosJson = '{ "data":[]}';
+
+    //   echo $datosJson;
+
+    //   return;
+
+    // }
+
+ 	$datosJson = '{
+		 
+		  "data": [ ';
+
+	for($i = 0; $i < count($destinatarios); $i++){
+	
+			/*=============================================
+			REVISAR ESTADO
+			=============================================*/ 
+
+			if( $destinatarios[$i]["estatus"] == 0){
+				
+				$colorEstado = "btn-danger";
+				$textoEstado = "Desactivado";
+				$estadoDestinatario = 1;
+
+			}else{
+
+				$colorEstado = "btn-success";
+				$textoEstado = "Activado";
+				$estadoDestinatario = 0;
+
+			}
+
+		 	$estado = "<button class='btn ".$colorEstado." btn-xs btnActivar' estadoDestinatario='".$estadoDestinatario."' idDestinatario='".$destinatarios[$i]["id"]."'>".$textoEstado."</button>";
+
+		 	
+			/*=============================================
+  			CREAR LAS ACCIONES
+  			=============================================*/
+	    
+		    // $acciones = "<div class='btn-group'><button class='btn btn-warning btnEditarDestinatario' idDestinatario='".$destinatarios[$i]["id"]."' data-toggle='modal' data-target='#modalEditarDestinatario'><i class='fa fa-pencil'></i></button><button class='btn btn-danger btnEliminarDestinatario' idDestinatario='".$destinatarios[$i]["id"]."'><i class='fa fa-times'></i></button></div>";
+		    $acciones = "<div class='btn-group'><button class='btn btn-warning btnEditarDestinatario' idDestinatario='".$destinatarios[$i]["id"]."' data-toggle='modal' data-target='#modalEditarDestinatario'><i class='fa fa-pencil'></i></button></div>";
+				    
+			$datosJson	 .= '[
+				      "'.($i+1).'",
+				      "'.$destinatarios[$i]["nombre_destina"].'",
+				      "'.$destinatarios[$i]["tipo_destina"].'",
+					  "'.$destinatarios[$i]["moneda"].'",
+					  "'.$destinatarios[$i]["nombre_banco"].'",
+					  "'.$destinatarios[$i]["num_cuenta"].'",
+					  "'.$destinatarios[$i]["tipo_cuenta"].'",
+					  "'.$destinatarios[$i]["num_identificacion"].'",
+					  "'.$destinatarios[$i]["swift"].'",
+				      "'.$estado.'",
+				      "'.$acciones.'"		    
+				    ],';
+
+	}
+
+	$datosJson = substr($datosJson, 0, -1);
+
+	$datosJson.=  ']
+		  
+	}'; 
+
+	echo $datosJson;
+
+
+ 	}
+
+
+}
+
+/*=============================================
+ACTIVAR TABLA DE CATEGORÍAS
+=============================================*/ 
+$activar = new TablaDestinatarios();
+$activar -> mostrarTabla();
+
+// if(isset($_POST["idUsuario"])){
+
+// 	$activar = new TablaDestinatarios();
+// 	$activar -> idUsuario = $_POST["idUsuario"];
+// 	$activar -> mostrarTabla();
+  
+//   }
