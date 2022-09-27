@@ -1,0 +1,215 @@
+/*=============================================
+FECHA DE NACIMIENTO
+=============================================*/
+$('.datepicker.entrada').datepicker({
+	// startDate: '0d',
+    datesDisabled: '0d',
+	format: 'yyyy/mm/dd',
+	todayHighlight:true
+});
+
+/*=============================================
+SELECT CON BUSCADOR
+=============================================*/
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#mi-selector').select2();
+    });
+});
+
+
+
+
+		/*=============================================
+	   	PREGUNTAMOS SI VIENEN IMÁGENES PARA MULTIMEDIA 
+	   	=============================================*/
+
+	   		if(arrayFiles.length > 0 && $("#compEmail").val() != ""){
+
+	   			var listaMultimedia = [];
+	   			var finalFor = 0;
+
+	   			for(var i = 0; i < arrayFiles.length; i++){
+
+	   				var datosMultimedia = new FormData();
+	   				datosMultimedia.append("file", arrayFiles[i]);
+					datosMultimedia.append("ruta", $("#compEmail").val());
+
+					$.ajax({
+						url:"ajax/usuarios.ajax.php",
+						method: "POST",
+						data: datosMultimedia,
+						cache: false,
+						contentType: false,
+						processData: false,
+						// beforeSend: function(){
+
+						// 	$(".modal-footer .preload").html(`
+
+
+						// 		<center>
+
+						// 			<img src="vistas/img/plantilla/status.gif" id="status" />
+						// 			<br>
+
+						// 		</center>
+
+						// 	`);
+
+						// },
+						success: function(respuesta){
+							// console.log(respuesta);
+
+							// $("#status").remove();
+							
+							listaMultimedia.push({"foto" : respuesta.substr(3)})
+							multimediaFisica = JSON.stringify(listaMultimedia);
+							
+							$(".valorMultimedia").val(multimediaFisica = JSON.stringify(listaMultimedia));
+							// console.log("listaMultimedia", listaMultimedia);
+
+							if(multimediaFisica != "null"){
+
+								$(".valorMultimedia").val(multimediaFisica = JSON.stringify(listaMultimedia));
+
+							}else{
+
+							 	swal({
+							      title: "El campo de foto de la Cédula no debe estar vacío",
+							      type: "error",
+							      confirmButtonText: "¡Cerrar!"
+							    });
+
+							 	return;
+
+							}
+
+							if((finalFor + 1) == arrayFiles.length){
+
+								agregarMiProducto(multimediaFisica);
+
+								finalFor = 0;
+
+							}
+
+							finalFor++;
+
+						}
+
+					})
+
+	   			}
+
+	   		}
+	// setTimeout(function(){
+
+	// },1000)		   
+
+})
+
+/*=============================================
+VALIDAD REGISTROS
+=============================================*/
+
+function completaRegistro(){
+
+	$(".alert").remove();
+
+	/*=============================================
+	VALIDAR EL NOMBRE
+	=============================================*/
+
+	var nombre = $("#compUsuario").val();
+
+	if(nombre != ""){
+
+		var expresion = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/;
+
+		if(!expresion.test(nombre)){
+
+			$("#compUsuario").parent().before('<div class="alert alert-warning"><strong>ERROR:</strong> No se permiten números ni caracteres especiales</div>')
+
+			return false;
+
+		}
+
+	}else{
+
+		$("#compUsuario").parent().before('<div class="alert alert-warning"><strong>ATENCIÓN:</strong> Este campo es obligatorio, debe ser el mismo en ID</div>')
+
+		return false;
+	}
+
+	/*=============================================
+	VALIDAR EL EMAIL
+	=============================================*/
+
+	var email = $("#compEmail").val();
+
+	if(email != ""){
+
+		var expresion = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+
+		if(!expresion.test(email)){
+
+			$("#compEmail").parent().before('<div class="alert alert-warning"><strong>ERROR:</strong> Escriba correctamente el correo electrónico</div>')
+
+			return false;
+
+		}
+
+		if(validarEmailRepetido){
+
+			$("#compEmail").parent().before('<div class="alert alert-danger"><strong>ERROR:</strong> El correo electrónico ya existe en la base de datos, por favor ingrese otro diferente</div>')
+
+			return false;
+
+		}
+
+	}else{
+
+		$("#compEmail").parent().before('<div class="alert alert-warning"><strong>ATENCIÓN:</strong> Este campo es obligatorio</div>')
+
+		return false;
+	}
+
+	/*=============================================
+	VALIDAR	FECHA DE NACIMIENTO
+	=============================================*/
+
+	function calcularEdad(fecha_nacimiento) {
+		var hoy = new Date();
+		var cumpleanos = new Date(fecha_nacimiento);
+		var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+		var m = hoy.getMonth() - cumpleanos.getMonth();
+		if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+			edad--;
+		}
+		return edad;
+	}
+
+	var edad = calcularEdad($("#fecha_nacimiento").val());
+	if(edad < 18){		
+		$("#fecha_nacimiento").parent().before('<div class="alert alert-warning"><strong>ERROR:</strong> Debes ser mayor a 18 años para operar con nosotros</div>')
+		// alert("Debes ser mayor a 18 años para operar con nosotros");
+		return false;
+	}
+
+	/*=============================================
+	VALIDAR POLÍTICAS DE PRIVACIDAD
+	=============================================*/
+
+	var politicas = $("#compPoliticas:checked").val();
+	
+	if(politicas != "on"){
+
+		$("#compPoliticas").parent().before('<div class="alert alert-warning"><strong>ATENCIÓN:</strong> Debe aceptar nuestras condiciones de uso y políticas de privacidad</div>')
+
+		return false;
+
+	}
+
+	return true;
+
+}
+
