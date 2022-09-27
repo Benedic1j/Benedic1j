@@ -1,0 +1,209 @@
+<?php
+
+require_once "../controladores/divisarec.controlador.php";
+require_once "../modelos/divisarec.modelo.php";
+
+class AjaxDivisarec{
+
+	/*=============================================
+  	ACTIVAR Divisarec
+ 	=============================================*/	
+
+ 	public $activarDivisarec;
+	public $activarId;
+
+	public function ajaxActivarDivisarec(){
+
+		$tabla = "divisas";
+
+		$item1 = "estado";
+		$valor1 = $this->activarDivisarec;
+
+		$item2 = "id";
+		$valor2 = $this->activarId;	
+
+		$respuesta = ModeloDivisarec::mdlActualizarDivisarec($tabla, $item1, $valor1, $item2, $valor2);
+
+		echo $respuesta;
+
+	}
+
+	/*=============================================
+	VALIDAR NO REPETIR Divisarec
+	=============================================*/	
+
+	public $validarDivisarec;
+
+	public function ajaxValidarDivisarec(){
+
+		$item = "iddivisa";
+		$valor = $this->validarDivisarec;
+
+		$respuesta = ControladorDivisarec::ctrMostrarDivisarec($item, $valor);
+
+		echo json_encode($respuesta);
+
+	}
+
+
+
+	/*============================================
+	GUARDAR Divisarec Y EDITAR Divisarec
+	=============================================*/	
+
+	public $tituloDivisarec;
+	public $siglaDivisarec;
+	public $tasaDivisarec;
+	public $tasaDivisaUSD;
+    public $tasaDivisaEuro;
+	public $comisionDivisarec;
+	public $porcentajeDivisarec;
+	public $topeDivisarec;
+	public $id;
+	public $minimoDivisarec;
+
+	public function  ajaxCrearDivisarec(){
+
+		$datos = array(
+			"tituloDivisarec"=>$this->tituloDivisarec,
+			"siglaDivisarec"=>$this->siglaDivisarec,
+			"tasaDivisarec"=>$this->tasaDivisarec,
+			"tasaDivisaUSD"=>$this->tasaDivisaUSD,
+            "tasaDivisaEuro"=>$this->tasaDivisaEuro,
+			"comisionDivisarec"=>$this->comisionDivisarec,
+			"porcentajeDivisarec"=>$this->porcentajeDivisarec,
+			"topeDivisarec"=>$this->topeDivisarec,
+			"minimoDivisarec"=>$this->minimoDivisarec
+			);
+
+		$respuesta = ControladorDivisarec::ctrCrearDivisarec($datos);
+
+		// echo json_encode($respuesta);
+	 	// return;
+
+		echo $respuesta;
+
+	}
+
+	/*=============================================
+	TRAER Divisarec
+	=============================================*/	
+
+	public $idDivisarec;
+
+	public function ajaxTraerDivisarec(){
+
+		$item = "id";
+		$valor = $this->idDivisarec;
+
+		$respuesta = ControladorDivisarec::ctrMostrarDivisarec($item, $valor);
+
+		echo json_encode($respuesta);
+
+	}
+
+	/*=============================================
+	EDITAR Divisarec
+	=============================================*/	
+
+	public function  ajaxEditarDivisarec(){
+
+		$datos = array(
+			"idDivisarec"=>$this->id,
+			"tituloDivisarec"=>$this->tituloDivisarec,
+			"siglaDivisarec"=>$this->siglaDivisarec,
+			"tasaDivisarec"=>$this->tasaDivisarec,
+			"tasaDivisaUSD"=>$this->tasaDivisaUSD,
+			"tasaDivisaEuro"=>$this->tasaDivisaEuro,
+			"comisionDivisarec"=>$this->comisionDivisarec,
+			"porcentajeDivisarec"=>$this->porcentajeDivisarec,
+			"topeDivisarec"=>$this->topeDivisarec,
+			"minimoDivisarec"=>$this->minimoDivisarec
+			);
+			
+		$respuesta = ControladorDivisarec::ctrEditarDivisarec($datos);
+
+	
+		echo $respuesta;
+
+	}
+
+ }
+
+/*=============================================
+ACTIVAR Divisarec
+=============================================*/	
+
+if(isset($_POST["activarDivisarec"])){
+
+	$activarDivisarec = new AjaxDivisarec();
+	$activarDivisarec -> activarDivisarec = $_POST["activarDivisarec"];
+	$activarDivisarec -> activarId = $_POST["activarId"];
+	$activarDivisarec -> ajaxActivarDivisarec();
+
+}
+
+/*=============================================
+VALIDAR NO REPETIR Divisarec
+=============================================*/
+
+if(isset($_POST["validarDivisarec"])){
+
+	$valDivisarec = new AjaxDivisarec();
+	$valDivisarec -> validarDivisarec = $_POST["validarDivisarec"];
+	$valDivisarec -> ajaxValidarDivisarec();
+
+}
+
+
+#CREAR Divisarec
+#-----------------------------------------------------------
+if(isset($_POST["tituloDivisarec"])){
+
+	$Divisarec = new AjaxDivisarec();
+	$Divisarec -> tituloDivisarec = $_POST["tituloDivisarec"];
+	$Divisarec -> siglaDivisarec = $_POST["siglaDivisarec"];
+	$Divisarec -> tasaDivisarec = $_POST["tasaDivisarec"];
+	$Divisarec -> tasaDivisaUSD = $_POST["tasaDivisaUSD"];
+    $Divisarec -> tasaDivisaEuro = $_POST["tasaDivisaEuro"];
+	$Divisarec -> comisionDivisarec = $_POST["comisionDivisarec"];
+	$Divisarec -> porcentajeDivisarec = $_POST["porcentajeDivisarec"];
+	$Divisarec -> topeDivisarec = $_POST["topeDivisarec"];
+	$Divisarec -> minimoDivisarec = $_POST["minimoDivisarec"];
+
+	$Divisarec -> ajaxCrearDivisarec();
+
+}
+
+/*=============================================
+TRAER Divisarec
+=============================================*/
+if(isset($_POST["idDivisarec"])){
+
+	$traerDivisarec = new AjaxDivisarec();
+	$traerDivisarec -> idDivisarec = $_POST["idDivisarec"];
+	$traerDivisarec -> ajaxTraerDivisarec();
+
+}
+
+/*=============================================
+EDITAR Divisarec
+=============================================*/
+if(isset($_POST["id"])){
+
+	$editarDivisarec = new AjaxDivisarec();
+	$editarDivisarec -> id = $_POST["id"];
+	$editarDivisarec -> tituloDivisarec = $_POST["editarDivisarec"];
+	$editarDivisarec -> siglaDivisarec = $_POST["siglaDivisarec"];
+	$editarDivisarec -> tasaDivisarec = $_POST["tasaDivisarec"];
+	$editarDivisarec -> tasaDivisaUSD = $_POST["tasaDivisaUSD"];
+    $editarDivisarec -> tasaDivisaEuro = $_POST["tasaDivisaEuro"];
+	$editarDivisarec -> comisionDivisarec = $_POST["comisionDivisarec"];
+	$editarDivisarec -> porcentajeDivisarec = $_POST["porcentajeDivisarec"];
+	$editarDivisarec -> topeDivisarec = $_POST["topeDivisarec"];
+	$editarDivisarec -> minimoDivisarec = $_POST["minimoDivisarec"];
+
+	$editarDivisarec -> ajaxEditarDivisarec();
+
+}
+
