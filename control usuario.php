@@ -1345,6 +1345,54 @@ class ControladorUsuarios{
 			}
 
 		}
+		/*==================================================
+		OTROS CAMPOS DE CONTACTOS
+		===============================================*/
+		$("#tipocontactenos").change(function(){
+			if($(this).val() == "SOPORTE"){	
+				$('#soporte').show();
+				$('#soportecontactenos').attr('required','');
+				$('#soportecontactenos').attr('data-error', 'this field is required.');
+				$('#girocontactenos').attr('required','');
+				$('#girocontactenos').attr('data-error', 'this field is required.');
+				$('#documentocontactenos').attr('required','');
+				$('#documentocontactenos').attr('data-error', 'this field is required.');
+				$('#beneficiarioContactenos').attr('required','');
+				$('#beneficiarioContactenos').attr('data-error', 'this field is required.');
+				
+					}else{
+						$('#soporte').hide();
+						$('#soportecontactenos').removeAttr('required');
+						$('#soportecontactenos').removeAttr('data-error');
+				                $('#girocontactenos').removeAttr('required');
+						$('#girocontactenos').removeAttr('data-error');
+						$('#documentocontactenos').removeAttr('required');
+						$('#documentocontactenos').removeAttr('data-error');
+						$('#beneficiariocontactenos').removeAttr('required');
+						$('#beneficiariocontactenos').removeAttr('data-error');
+					}
+					});
+				$("#otroscampos".trigger("change");
+				  $("#seesnotherfieldgroup").change(function(){
+					  if($(this).val() == "CAMBIAR"){
+						  $('#otherfieldgroupdiv').show();
+						  $('otherfieldCa').attr('required', '');
+						  $('#otherfieldCa').attr('data-error', 'this field is required.');
+						  $('#otherfieldCa1').attr('requiered', '');
+						  $('#otherfieldCa1').attr('data-error', ' this field is required.');
+					  }else{
+						  $('#otherfieldgroupdiv').hide();
+						  $('#otherfieldCa').removeAttr('required);
+						  $('#otherfieldCa').removeAttr('data-error);
+						  $('#otherfieldCa1').removeAttr('required');
+						  $('#otherfieldCa1').removeAttr('data-error');
+										}
+										});
+						  $("#seeanotherfieldgroup").trigger("change");
+						  
+					  }
+				  }
+								    }
 
 	}
 
