@@ -1,0 +1,106 @@
+print("ACCESO USARIO")
+    print("")
+    id=262596729
+    total=0
+    numero_vip=0
+    i=1
+    cont=0
+    num_usuario=0
+    sw=1 
+    while sw == 1 :
+       print("para acceder el registro seleciona opcion")
+       print("presiona 1=residente 2= visitante 3=VIP 4=salir de la app")
+       usuario = int(input("Identificate como usuario para ingresar al sistema"))
+       try:
+         if usuario > 0 and usuario < 5 :
+            if usuario == 1 :
+              id_res=int(input("ingresa id de usuario\n"))
+              cont +=1
+              if id_res == id:
+                 print("puedes ingresar al edificio")
+                 continu=input("ingresa 1=si para continuar 2=no para salir\n")
+                 if continu== 2 :
+                   print("saliste de la apllicacion")
+                   sw=0
+              else:
+                 print("su usuario esta incorecto")
+                 sw=0
+                 
+            if usuario == 2:
+              nombre_usuario2=input("ingrese nombre de visitante\n")
+              id_visitante=input("ingrese el id visitante\n")
+              num_DPT=input("ingrese numero departamente\n")
+              confirma =int(input("ingresa 1=si confirmado de residente 2=no no hay  confirmacion de su ingreso\n"))
+              if confirma == 1 :
+                  print(f"su ingreso es valida ingresa al departamento {num_DPT}\n")
+                  num_usuario +=1
+              else :
+                  print("no puede ingresar en el edificio")
+                  sw=0
+            if usuario == 3:
+               while sw == 1 :
+                   print("estas por ingresar en la zona VIP")
+                   print("seleciona 1=BANCOBen  2=resa 3=BANa 4=sinbanco 5=salir")
+                   class_vip=int(input("ingresa que tarjeta de banco usaras como VIP\n"))
+                   if class_vip == 1 :
+                      edada=int(input("ingresar 1=mayor 2=niño:12 años 3=bb 4=salir\n"))
+                      try:
+                          if edada >0 and edada <4 :
+                              if edada == 1 :
+                                 empezar= 1
+                                 end_edada1=int(input("cuantas personas adultos ingresaras"))
+                                 for n in range(1,end_edada1,1) :
+                                     nombre_edada1=input("ingresar nombre de personas que ingresara")
+                                     valor1=70000*end_edada1
+                                     total += valor1
+                                     numero_vip +=1
+                              elif edada == 2 :
+                                   num_edada2 = input("ingresa cuanto persona son \n")
+                                   valor2 = num_edada2 * 45000
+                                   total += valor2
+                              elif edada == 3 :
+                                   print("el ingreso para los bb es gratis")
+                              if edada == 4 :
+                                   print("estas saliendo de sistema")
+                                   sw=0 
+                      except:
+                          print("opcion no existe") 
+
+                   if class_vip == 2 : 
+                      eda=int(input("ingresar 1=mayor 2=niño:12 años 3=bb 4=salir\n"))
+                      try:
+                          if eda >0 and eda <4 :
+                              if eda == 1 :
+                                 empezar= 1
+                                 end_eda1=int(input("cuantas personas adultos ingresaras"))
+                                 for n in range(1,end_eda1,1) :
+                                     nombre_eda1=input("ingresar nombre de personas que ingresara")
+                                     valor1=90000*end_eda1
+                                     total += valor1
+                                     numero_vip +=1
+                              elif eda == 2 :
+                                   empezar= 1
+                                   end_eda2=int(input("cuantas personas adultos ingresaras"))
+                                   for n in range(1,end_eda2,1) :
+                                     nombre_eda2=input("ingresar nombre de personas que ingresara")
+                                     valor_eda=50000*end_eda2
+                                     total += valor_eda
+                                     numero_vip +=1
+                              elif eda == 3 :
+                                   print("el ingreso para los bb es gratis")
+                                   empezar= 1
+                                   end_eda3=int(input("cuantas personas adultos ingresaras")+1)
+                                   for n in range(1,end_eda3,1) :
+                                     nombre_eda3=input("ingresar nombre de personas que ingresara")
+                              if eda == 4 :
+                                   print("estas saliendo de sistema")
+                                   sw=0 
+                      except:
+                          print("opcion no existe") 
+       except:
+         print("no ingresaste un numero valido")
+print(f"NOMBRE VISITANTE ´{nombre_usuario2}")
+print(f"ID VISITANTE {id_visitante}")
+
+print("BOLETA DE COMPRA")
+     
